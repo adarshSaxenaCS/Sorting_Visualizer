@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style type="text/css">
+#myCanvas{
+border: 1px solid white;
+background:#141414;
+padding: 40px;
+}
+</style>
+<script src='jquery/jquery.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/p5@1.4.1/lib/p5.min.js"></script> 
+<style>
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #141414;
+  }
+
+  .canvas {
+    display:#141414;
+border: 1px solid red;
+background:#141414;
+padding:auto;
+margin:auto;
+  }
+</style>
+<script>
+var flag=0;
+var count=0;
+
+let array =new Array();
+let w = 0;
+let c = [];
+async function quickSort(arr, start, end) {
+
+
+ if (start >= end) {
+    return;
+  }
+  let index = await partition(arr, start, end);
+  c[index] = -1;
+  await Promise.all([
+    quickSort(arr, start, index - 1),
+    quickSort(arr, index + 1, end)
+  ]);
+}
+async function partition(arr, start, end) {
+
+
+  for (let i = start; i < end; i++) {
+    c[i] = 1;
+  }
+  let pivotValue = arr[end];
+  let pivotIndex = start;
+  c[pivotIndex] = 0;
+  for (let i = start; i < end; i++) {
+    if (arr[i] < pivotValue) {
+      await swap(arr, i, pivotIndex);
+      c[pivotIndex] = -1;
+      pivotIndex++;
+      c[pivotIndex] = 0;
+    }
+  }
+  await swap(arr, pivotIndex, end);
+  for (let i = start; i < end; i++) {
+    if (i != pivotIndex) {
+      c[i] = -1;
+    }
+  }
+ return pivotIndex;
+}
+function draw() 
+{
+if(flag==1)return;
+background("#141414");
+var x=50;
+var gg=parseInt(w/2)+12;
+for (let i = 0; i < array.length; i++)
+{
+noStroke();
+if (c[i] == 0)
+{
+fill('#6b6b19'); 
+} else if (c[i] == 1)
+{
+fill('#2F4F4F');
+} else
+{
+ fill('crimson');
+}
+    rect(x, height - array[i], w, array[i]);
+fill('#ffff4d');
+text(array[i],x,height - array[i]-10);
+    
+x+=w+10;
+  }
+}
+async function swap(arr, a, b) {
+count++;
+$("h1").html("Count is : "+count);
+  
+
+
+
+await sleep(500);
+  let temp = arr[a];
+  arr[a] = arr[b];
+  arr[b] = temp;
+}
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+$(()=>{
+var n =45;
+createCanvas(1300,530);
+if(array.length>0)array.length=0;
+var x;
+var max=450;
+var min=10;
+for(var i=0;i<n;i++)
+{
+x=Math.floor(Math.random()*(max-min+1)+min);
+array.push(x);
+c[i] = -1;
+}
+var ww=parseInt(n/10);
+w=0;
+if(n<=50)
+{
+for(var i=5;i>=ww;i--)w+=10;
+}
+else
+{
+w=10;
+}
+quickSort(array, 0, array.length - 1);
+});
+
+function stop()
+{
+flag=1;
+}
+
+function start()
+{
+flag=0;
+}
+
+
+</script>
+<body style="background-color:">
+<center>
+<button onclick="stop()">Stop</botton>
+<button onclick="start()">Start</button>
+
+<h1 style="color:white">Count is :</h1>
+
+</center>
+</body>
+</html>
